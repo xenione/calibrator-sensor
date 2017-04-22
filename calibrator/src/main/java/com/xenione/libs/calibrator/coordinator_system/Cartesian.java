@@ -74,6 +74,14 @@ public  class Cartesian {
         return point.y;
     }
 
+    public void x(int x) {
+        point.x = x;
+    }
+
+    public void y(int y) {
+        point.y = y;
+    }
+
     public int distance() {
         return (int) Math.sqrt(Math.pow(point.x, 2) + Math.pow(point.y, 2));
     }

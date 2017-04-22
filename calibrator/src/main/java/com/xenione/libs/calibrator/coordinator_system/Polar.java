@@ -32,7 +32,7 @@ public class Polar {
         this.alpha = (2 * Math.PI / 360) * deg;
     }
 
-    public void distance(int distance) {
+    public void offset(int distance) {
         this.distance += distance;
     }
 

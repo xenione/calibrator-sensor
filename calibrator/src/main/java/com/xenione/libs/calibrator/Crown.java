@@ -20,19 +20,18 @@ import android.util.SparseArray;
 
 import com.xenione.libs.calibrator.coordinator_system.Polar;
 
-public class Crown implements Drawable {
+public class Crown<T extends Drawable> implements Drawable {
 
-    private SparseArray<Drawable> registerSpines = new SparseArray<>();
+    private SparseArray<T> registerSpines = new SparseArray<>();
 
     private Crown() {
-
     }
 
-    void addDrawable(int alpha, Drawable drawable) {
+    void addDrawable(int alpha, T drawable) {
         registerSpines.put(alpha, drawable);
     }
 
-    public Drawable drawableAt(int alpha) {
+    public T drawableAt(int alpha) {
         return registerSpines.get(alpha);
     }
 
@@ -43,45 +42,45 @@ public class Crown implements Drawable {
         }
     }
 
-    public static class Builder {
+    public static class Builder<T extends Drawable> {
 
         int from = 0;
         int to = 360;
         int distance;
-        DrawableFactory factory;
-        int amount;
+        DrawableFactory<T> factory;
+        double amount;
 
-        public Builder from(int deg) {
+        public Builder<T> from(int deg) {
             this.from = deg;
             return this;
         }
 
-        public Builder to(int deg) {
+        public Builder<T> to(int deg) {
             this.to = deg;
             return this;
         }
 
-        public Builder distance(int distance) {
+        public Builder<T> distance(int distance) {
             this.distance = distance;
             return this;
         }
 
-        public Builder amount(int amount) {
+        public Builder<T> amount(int amount) {
             this.amount = amount;
             return this;
         }
 
-        public Builder drawableFactory(DrawableFactory factory) {
+        public Builder<T> drawableFactory(DrawableFactory<T> factory) {
             this.factory = factory;
             return this;
         }
 
-        public Crown build() {
-            Crown crown = new Crown();
+        public Crown<T> build() {
+            Crown<T> crown = new Crown<>();
             double interval = (to - from) / amount;
             for (int i = 0; i < amount; i++) {
                 double alpha = interval * i;
-                Drawable drawable = factory.create(i, new Polar(distance, alpha));
+                T drawable = factory.create(i, new Polar(distance, alpha));
                 crown.addDrawable((int) alpha, drawable);
             }
             return crown;

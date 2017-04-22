@@ -18,7 +18,7 @@ package com.xenione.libs.calibrator;
 
 import com.xenione.libs.calibrator.coordinator_system.Polar;
 
-public interface DrawableFactory {
+public interface DrawableFactory<T extends Drawable> {
 
-    Drawable create(int index, Polar polar);
+    T create(int index, Polar polar);
 }

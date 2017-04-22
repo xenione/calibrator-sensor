@@ -48,7 +48,7 @@ public class CoordinatorSystem {
         return new Polar(distance, alpha2Pi);
     }
 
-    public static Cartesian toCartesian(Polar polar) {
+    public static void toCartesian(Polar polar,Cartesian cartesian) {
 
         int x;
         int y;
@@ -81,6 +81,14 @@ public class CoordinatorSystem {
                 x = (int) (polar.distance * Math.cos(alpha));
             }
         }
-        return new Cartesian(x, y);
+
+        cartesian.x(x);
+        cartesian.y(y);
+    }
+
+    public static Cartesian toCartesian(Polar polar) {
+        Cartesian cartesian = new Cartesian(0, 0);
+        toCartesian(polar, cartesian);
+        return cartesian;
     }
 }
