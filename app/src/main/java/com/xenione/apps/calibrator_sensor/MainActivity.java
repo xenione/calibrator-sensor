@@ -1,21 +1,26 @@
 package com.xenione.apps.calibrator_sensor;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.xenione.libs.calibrator.CalibratorView;
+import com.xenione.libs.calibrator.orientation.OrientationService;
 
 public class MainActivity extends AppCompatActivity {
 
     SeekBar seekBar;
+    private OrientationService mOrientationService;
+    CalibratorView calibratorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final CalibratorView calibratorView = (CalibratorView) findViewById(R.id.calibrator);
+        calibratorView = (CalibratorView) findViewById(R.id.calibrator);
         calibratorView.setOnCalibrationListener(new CalibratorView.CalibrationListener() {
             @Override
             public void onCalibrationComplete() {
@@ -41,11 +46,25 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        mOrientationService = new OrientationService(this);
+        mOrientationService.registerUpdateListener(mOrientationListener);
     }
+
+    private OrientationService.OrientationListener mOrientationListener = new OrientationService.OrientationListener() {
+        @Override
+        public void onOrientationChanged(float[] orientation) {
+            int deg = (int) ((360 / (2 * Math.PI)) * orientation[0]);
+            calibratorView.setAlpha(deg);
+
+        }
+    };
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         seekBar.setOnSeekBarChangeListener(null);
+        mOrientationService.unregisterUpdateListener(mOrientationListener);
+        mOrientationService.release();
     }
 }

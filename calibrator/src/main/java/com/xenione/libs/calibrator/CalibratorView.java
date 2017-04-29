@@ -144,6 +144,5 @@ public class CalibratorView extends View {
                 && --lastLayerCountdown == 0) {
             mListener.onCalibrationComplete();
         }
-
     }
 }
