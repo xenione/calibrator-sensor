@@ -19,6 +19,7 @@ import android.graphics.Canvas;
 import android.util.SparseArray;
 
 import com.xenione.libs.calibrator.coordinator_system.Polar;
+import com.xenione.libs.calibrator.utils.Searcher;
 
 public class Crown<T extends Drawable> implements Drawable {
 
@@ -32,7 +33,7 @@ public class Crown<T extends Drawable> implements Drawable {
     }
 
     public T drawableAt(int alpha) {
-        return registerSpines.get(alpha);
+        return Searcher.binarySearch(registerSpines, alpha);
     }
 
     @Override
