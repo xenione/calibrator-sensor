@@ -1,6 +1,8 @@
 package com.xenione.libs.calibrator.orientation.filters;
 
 
+import android.util.Log;
+
 /**
  * This class is a FIR filter for 50 ms sample time
  */
@@ -18,19 +20,36 @@ public class FIRFilter implements Filter {
             0f, 0f, 0f, 0f, 0f, 0f,
             0f,};
 
-    private float[] xaux = new float[]{
-            0f, 0f, 0f, 0f, 0f, 0f,
-            0f, 0f, 0f, 0f, 0f, 0f,
-            0f, 0f, 0f, 0f, 0f, 0f,
-            0f,};
+    private double compensation = 0;
+    private double lastU = -1;
 
     @Override
     public float filter(float u) {
-        System.arraycopy(x, 0, xaux, 1, xaux.length - 1);
-        xaux[0] = u;
-        float y = MatrixUtil.multiplication(xaux, coef);
-        System.arraycopy(xaux, 0, x, 0, x.length);
-        return y;
+        double uC = compensation(positivize(u));
+        MatrixUtil.insert((float) uC, x);
+        float f = MatrixUtil.multiplication(x, coef);
+        lastU = uC;
+        Log.i("orientation", "radians filtered: " + uC + " raw:" + u);
+        return positivize((float) (f % (2 * Math.PI)));
+    }
+
+    private float positivize(float value) {
+        return (value > 0) ? value : (value + 2 * (float) Math.PI);
+    }
+
+    private double compensation(double u) {
+        double uC = u + compensation;
+        if (lastU == -1) {
+            lastU = uC;
+        }
+        if (Math.abs(lastU - uC) > 2 * 0.8 * Math.PI) {
+            if (lastU > uC) {
+                compensation += (2 * Math.PI);
+            } else {
+                compensation -= (2 * Math.PI);
+            }
+        }
+        return u + compensation;
     }
 
     public float[] getCoef() {

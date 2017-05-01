@@ -3,6 +3,7 @@ package com.xenione.apps.calibrator_sensor;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -54,9 +55,11 @@ public class MainActivity extends AppCompatActivity {
     private OrientationService.OrientationListener mOrientationListener = new OrientationService.OrientationListener() {
         @Override
         public void onOrientationChanged(float[] orientation) {
-            int deg = (int) ((360 / (2 * Math.PI)) * orientation[0]);
+            int deg = (int) ((0.3333) * ((360 / (2 * Math.PI)) * orientation[0]) +
+                    (0.3333) * ((360 / (2 * Math.PI)) * orientation[1]) +
+                    (0.3333) * ((360 / (2 * Math.PI)) * orientation[2]));
+            Log.i("MainActivity", "deg: " + deg);
             calibratorView.setAlpha(deg);
-
         }
     };
 

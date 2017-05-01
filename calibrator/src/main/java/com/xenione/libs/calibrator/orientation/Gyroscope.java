@@ -5,7 +5,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import com.xenione.libs.calibrator.orientation.filters.Filter;
 import com.xenione.libs.calibrator.orientation.filters.NoFilter;
@@ -93,7 +92,7 @@ public class Gyroscope implements SensorEventListener {
     private void filter(float[] orientation) {
         int dimen = Math.min(orientation.length, 3);
         for (int i = 0; i < dimen; i++) {
-            orientation[i] = filter[i].filter(positivize(raw[i]));
+            orientation[i] = filter[i].filter(raw[i]);
         }
     }
 
@@ -103,10 +102,5 @@ public class Gyroscope implements SensorEventListener {
 
     public void getFilteredOrientation(float[] orientation) {
         filter(orientation);
-        Log.i("orientation", "radians filtered: " + orientation[0] + " raw:" + raw[0]);
-    }
-
-    private float positivize(float value) {
-        return (value > 0) ? value : (value + 2 * (float) Math.PI);
     }
 }

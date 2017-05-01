@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.os.Message;
 
 import com.xenione.libs.calibrator.orientation.filters.FIRFilter;
-import com.xenione.libs.calibrator.orientation.filters.NoFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +36,8 @@ public class OrientationService implements Runnable {
 
     private List<OrientationListener> mOrientationCallbacks = new ArrayList<>();
     private OrientationHandler mHandler;
-    private Gyroscope gyro;
-    private float[] orientation = new float[3];
+    private volatile Gyroscope gyro;
+    private volatile float[] orientation = new float[3];
 
     /**
      * Service to track orientation backed by accelerometer and magnetic sensors
@@ -64,7 +63,7 @@ public class OrientationService implements Runnable {
 
     private void init(Context context) {
         gyro = new Gyroscope(context);
-        gyro.setFilter(new NoFilter(), new FIRFilter(), new FIRFilter()); /*this filters are for 50 ms sample time*/
+        gyro.setFilter(new FIRFilter(), new FIRFilter(), new FIRFilter()); /*this filters are for 50 ms sample time*/
         mService.scheduleAtFixedRate(this, 300, 50, TimeUnit.MILLISECONDS);
     }
 
@@ -88,7 +87,7 @@ public class OrientationService implements Runnable {
     @Override
     public void run() {
         gyro.getFilteredOrientation(orientation);
-        mHandler.obtainMessage(NOTIFY_ORIENTATION, orientation).sendToTarget();
+        mHandler.obtainMessage(NOTIFY_ORIENTATION).sendToTarget();
     }
 
     private class OrientationHandler extends Handler {
@@ -100,7 +99,6 @@ public class OrientationService implements Runnable {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == NOTIFY_ORIENTATION) {
-                float[] orientation = (float[]) msg.obj;
                 for (OrientationListener listener : mOrientationCallbacks) {
                     listener.onOrientationChanged(orientation);
                 }

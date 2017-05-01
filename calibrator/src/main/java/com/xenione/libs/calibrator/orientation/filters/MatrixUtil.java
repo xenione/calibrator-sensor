@@ -1,5 +1,6 @@
 package com.xenione.libs.calibrator.orientation.filters;
 
+
 /**
  * Created by Eugeni on 11/05/2016.
  */
@@ -20,6 +21,11 @@ public class MatrixUtil {
         }
 
         return result;
+    }
+
+    public static void insert(float newX, float[] x) {
+        System.arraycopy(x, 0, x, 1, x.length - 1);
+        x[0] = newX;
     }
 
     public static void add(float[] array, float added) {
