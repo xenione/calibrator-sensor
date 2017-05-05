@@ -64,7 +64,7 @@ public class Spine implements Drawable {
             this.paint = new Paint();
             this.paint.setColor(color);
             this.paint.setAntiAlias(true);
-            this.paint.setStrokeWidth(4);
+            this.paint.setStrokeWidth(5);
             this.paint.setStyle(Paint.Style.FILL_AND_STROKE);
         }
 
@@ -86,6 +86,5 @@ public class Spine implements Drawable {
         public void draw(Canvas canvas, Cartesian start, Cartesian end) {
             canvas.drawLine(start.x(), start.y(), end.x(), end.y(), paint);
         }
-
     }
 }

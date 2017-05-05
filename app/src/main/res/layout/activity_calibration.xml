@@ -5,18 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.xenione.apps.calibrator_sensor.MainActivity">
+    tools:context="com.xenione.apps.calibrator_sensor.CalibrationActivity">
 
     <com.xenione.libs.calibrator.CalibratorView
         android:id="@+id/calibrator"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@android:color/black" />
-
-    <android.support.v7.widget.AppCompatSeekBar
-        android:id="@+id/seek"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:max="360" />
 </LinearLayout>

@@ -31,7 +31,7 @@ public class Searcher {
         while (lo < hi) {
             int mid = (lo + hi) / 2;
             lastKey = array.keyAt(mid);
-            if (key < lastKey) {
+            if (key <= lastKey) {
                 hi = mid - 1;
             } else {
                 lo = mid + 1;

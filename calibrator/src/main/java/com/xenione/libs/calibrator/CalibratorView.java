@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.xenione.libs.calibrator;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,8 +24,12 @@ import android.graphics.Matrix;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
+
 import com.xenione.libs.calibrator.coordinator_system.Polar;
+import com.xenione.libs.calibrator.orientation.Compensator;
 
 public class CalibratorView extends View {
 
@@ -46,7 +51,6 @@ public class CalibratorView extends View {
     private int mSize;
 
     private CalibrationListener mListener;
-
 
     public CalibratorView(Context context) {
         super(context);
@@ -76,7 +80,8 @@ public class CalibratorView extends View {
 
     private void resize() {
         buildProjectionMatrix();
-        mSize = Math.min(this.getWidth() / 2, this.getHeight() / 2);
+        mSize = Math.min(this.getWidth() / 2 - getPaddingLeft() - getPaddingRight(),
+                this.getHeight() / 2 - getPaddingTop() - getPaddingBottom());
         mCrown = buildCrown();
         mBall = buildBall();
     }
@@ -102,14 +107,19 @@ public class CalibratorView extends View {
                 .drawableFactory(new DrawableFactory<Spine>() {
                     @Override
                     public Spine create(int index, Polar position) {
-                        return new Spine(position, SPINE_LENGTH);
+                        int length = SPINE_LENGTH;
+                        if (index % 5 == 0) {
+                            length = (int) (1.5 * SPINE_LENGTH);
+                        }
+                        return new Spine(position, length);
                     }
                 }).build();
     }
 
     private Ball buildBall() {
         int radius = 25;
-        int distance = mSize - 2 * radius - SPINE_LENGTH - MARGIN;
+        int gap = 20;
+        int distance = mSize - 2 * radius - SPINE_LENGTH - MARGIN - gap;
         return new Ball.Builder()
                 .radius(radius)
                 .distance(distance)
@@ -124,7 +134,43 @@ public class CalibratorView extends View {
         mCrown.draw(canvas);
     }
 
-    public void setAlpha(int alpha) {
+    public void setOrientation(int alpha) {
+        startInterpolation(alpha);
+    }
+
+
+    ValueAnimator animator = null;
+    Compensator compensator = new Compensator();
+
+    private void startInterpolation(int alpha) {
+        if (animator == null) {
+            animator = new ValueAnimator();
+            animator.setIntValues(0, 0);
+            animator.setDuration(50);
+            animator.setInterpolator(new LinearInterpolator());
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    redraw((int) animation.getAnimatedValue());
+                }
+            });
+        }
+        if (animator.isStarted()) {
+            animator.cancel();
+        }
+        int lastValue = (int) animator.getAnimatedValue();
+
+        if (lastValue == alpha) {
+            return;
+        }
+        animator.setIntValues(lastValue, alpha);
+        Log.i("CalibratorView", "from : " + animator.getAnimatedValue() + " to : " + alpha);
+        animator.start();
+    }
+
+    private void redraw(int alpha) {
+        Log.i("CalibratorView", "animated alpha : " + alpha);
+
         mBall.setAlpha(alpha);
         setAlphaOnCrown(alpha);
         invalidate();

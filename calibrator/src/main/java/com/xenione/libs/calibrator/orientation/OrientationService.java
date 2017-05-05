@@ -64,7 +64,10 @@ public class OrientationService implements Runnable {
     private void init(Context context) {
         gyro = new Gyroscope(context);
         gyro.setFilter(new FIRFilter(), new FIRFilter(), new FIRFilter()); /*this filters are for 50 ms sample time*/
-        mService.scheduleAtFixedRate(this, 300, 50, TimeUnit.MILLISECONDS);
+    }
+
+    public void start(int fixRate){
+        mService.scheduleAtFixedRate(this, 300, fixRate, TimeUnit.MILLISECONDS);
     }
 
     public void registerUpdateListener(OrientationListener listener) {
@@ -75,7 +78,7 @@ public class OrientationService implements Runnable {
         mOrientationCallbacks.remove(listener);
     }
 
-    public void release() {
+    public void stop() {
         if (mService != null) {
             gyro.release();
             mService.shutdown();
