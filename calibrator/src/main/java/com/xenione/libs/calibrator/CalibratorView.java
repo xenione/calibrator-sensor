@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.xenione.libs.calibrator;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -26,10 +25,8 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 
 import com.xenione.libs.calibrator.coordinator_system.Polar;
-import com.xenione.libs.calibrator.orientation.Compensator;
 
 public class CalibratorView extends View {
 
@@ -52,21 +49,34 @@ public class CalibratorView extends View {
 
     private CalibrationListener mListener;
 
+    private Animator animator = new Animator(50);
+
     public CalibratorView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public CalibratorView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public CalibratorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public CalibratorView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
+    }
+
+    private void init() {
+        animator.setUpdateListener(new Animator.UpdateListener() {
+            @Override
+            public void onUpdate(int fraction) {
+                redraw(fraction);
+            }
+        });
     }
 
 
@@ -135,37 +145,7 @@ public class CalibratorView extends View {
     }
 
     public void setOrientation(int alpha) {
-        startInterpolation(alpha);
-    }
-
-
-    ValueAnimator animator = null;
-    Compensator compensator = new Compensator();
-
-    private void startInterpolation(int alpha) {
-        if (animator == null) {
-            animator = new ValueAnimator();
-            animator.setIntValues(0, 0);
-            animator.setDuration(50);
-            animator.setInterpolator(new LinearInterpolator());
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    redraw((int) animation.getAnimatedValue());
-                }
-            });
-        }
-        if (animator.isStarted()) {
-            animator.cancel();
-        }
-        int lastValue = (int) animator.getAnimatedValue();
-
-        if (lastValue == alpha) {
-            return;
-        }
-        animator.setIntValues(lastValue, alpha);
-        Log.i("CalibratorView", "from : " + animator.getAnimatedValue() + " to : " + alpha);
-        animator.start();
+        animator.startFrom(alpha);
     }
 
     private void redraw(int alpha) {
