@@ -23,10 +23,10 @@ import android.graphics.Matrix;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.xenione.libs.calibrator.coordinator_system.Polar;
+import com.xenione.libs.calibrator.utils.MathUtils;
 
 public class CalibratorView extends View {
 
@@ -73,7 +73,7 @@ public class CalibratorView extends View {
     private void init() {
         animator.setUpdateListener(new Animator.UpdateListener() {
             @Override
-            public void onUpdate(int fraction) {
+            public void onUpdate(float fraction) {
                 redraw(fraction);
             }
         });
@@ -128,7 +128,7 @@ public class CalibratorView extends View {
 
     private Ball buildBall() {
         int radius = 25;
-        int gap = 20;
+        int gap = 10;
         int distance = mSize - 2 * radius - SPINE_LENGTH - MARGIN - gap;
         return new Ball.Builder()
                 .radius(radius)
@@ -144,15 +144,13 @@ public class CalibratorView extends View {
         mCrown.draw(canvas);
     }
 
-    public void setOrientation(int alpha) {
+    public void setOrientation(float alpha) {
         animator.startFrom(alpha);
     }
 
-    private void redraw(int alpha) {
-        Log.i("CalibratorView", "animated alpha : " + alpha);
-
+    private void redraw(float alpha) {
         mBall.setAlpha(alpha);
-        setAlphaOnCrown(alpha);
+        setOrientationOnCrown(alpha);
         invalidate();
     }
 
@@ -160,8 +158,8 @@ public class CalibratorView extends View {
         mListener = listener;
     }
 
-    private void setAlphaOnCrown(int alpha) {
-        Spine spine = mCrown.drawableAt(alpha);
+    private void setOrientationOnCrown(float alpha) {
+        Spine spine = mCrown.drawableAt(MathUtils.convertToDeg(alpha));
         if (spine == null || spine.isLastLayer()) {
             return;
         }

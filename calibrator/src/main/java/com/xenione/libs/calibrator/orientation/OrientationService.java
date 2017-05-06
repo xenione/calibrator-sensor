@@ -67,7 +67,7 @@ public class OrientationService implements Runnable {
     }
 
     public void start(int fixRate){
-        mService.scheduleAtFixedRate(this, 300, fixRate, TimeUnit.MILLISECONDS);
+        mService.scheduleAtFixedRate(this, 500, fixRate, TimeUnit.MILLISECONDS);
     }
 
     public void registerUpdateListener(OrientationListener listener) {

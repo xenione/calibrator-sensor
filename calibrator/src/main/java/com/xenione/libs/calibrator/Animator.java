@@ -18,10 +18,12 @@ limitations under the License.
 import android.animation.ValueAnimator;
 import android.view.animation.LinearInterpolator;
 
+import com.xenione.libs.calibrator.orientation.Compensator;
+
 public class Animator {
 
     public interface UpdateListener {
-        void onUpdate(int fraction);
+        void onUpdate(float fraction);
     }
 
     private UpdateListener updateListener;
@@ -30,12 +32,14 @@ public class Animator {
 
     private AnimatorUpdateListener animatorUpdateListener = new AnimatorUpdateListener();
 
+    private Compensator compensator = new Compensator();
+
     public Animator(long duration) {
         initAnimator(duration);
     }
 
     private void initAnimator(long duration) {
-        animator = ValueAnimator.ofInt(0, 0);
+        animator = ValueAnimator.ofFloat(0f, 0f);
         animator.setDuration(duration);
         animator.setInterpolator(new LinearInterpolator());
         animator.addUpdateListener(animatorUpdateListener);
@@ -45,15 +49,19 @@ public class Animator {
         updateListener = listener;
     }
 
-    public void startFrom(int end) {
+
+
+    public void startFrom(float end) {
         if (animator.isStarted()) {
             animator.cancel();
         }
-        int start = (int) animator.getAnimatedValue();
-        if (start == end) {
+        float startC = (float) animator.getAnimatedValue();
+        float endC = (float) compensator.compensate(end);
+        if (startC == endC) {
             return;
         }
-        animator.setIntValues(start, end);
+        compensator.setLastUC(startC);
+        animator.setFloatValues(startC, endC);
         animator.start();
     }
 
@@ -61,7 +69,8 @@ public class Animator {
 
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
-            updateListener.onUpdate((int) animation.getAnimatedValue());
+            float alpha = (float) compensator.removeCompensation((float) animation.getAnimatedValue());
+            updateListener.onUpdate(alpha);
         }
     }
 }

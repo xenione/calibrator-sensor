@@ -50,7 +50,7 @@ public class Ball implements Drawable {
     }
 
     public void setAlpha(double alpha) {
-        position.alpha = (2 * Math.PI / 360) * alpha;
+        position.alpha = alpha;
     }
 
     @Override

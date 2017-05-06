@@ -27,10 +27,10 @@ public class FIRFilter implements Filter {
 
     @Override
     public float filter(float u) {
-        double uC = compensator.compensation(positivize(u));
+        double uC = compensator.compensate(positivize(u));
         matrixHelper.startWith((float) uC);
         float f = matrixHelper.multiplication(coef);
-        return positivize((float) compensator.invCompensation(f));
+        return positivize((float) compensator.removeCompensation(f));
     }
 
     private float positivize(float value) {

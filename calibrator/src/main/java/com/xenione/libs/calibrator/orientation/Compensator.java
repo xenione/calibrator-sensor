@@ -19,21 +19,27 @@ public class Compensator {
 
     private double compensation = 0;
     private double lastUC = -1;
+    private boolean isLastUCSet = false;
 
 
-    public double invCompensation(float f) {
+    public double removeCompensation(float f) {
         return (f % (2 * Math.PI));
     }
 
-    public double compensation(double u) {
+    public double compensate(double u) {
         double uC = u + compensation;
-        if (lastUC == -1) {
-            lastUC = uC;
+        if (!isLastUCSet) {
+            setLastUC(uC);
         }
         if (Math.abs(lastUC - uC) > 2 * 0.8 * Math.PI) {
             compensation += lastUC > uC ? (2 * Math.PI) : -(2 * Math.PI);
         }
         lastUC = u + compensation;
         return lastUC;
+    }
+
+    public void setLastUC(double value) {
+        lastUC = value;
+        isLastUCSet = true;
     }
 }

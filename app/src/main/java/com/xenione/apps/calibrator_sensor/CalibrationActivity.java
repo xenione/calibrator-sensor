@@ -34,8 +34,7 @@ public class CalibrationActivity extends AppCompatActivity {
     private OrientationService.OrientationListener mOrientationListener = new OrientationService.OrientationListener() {
         @Override
         public void onOrientationChanged(float[] orientation) {
-            int deg = (int) ((360 / (2 * Math.PI)) * orientation[0]);
-            calibratorView.setOrientation(deg);
+            calibratorView.setOrientation(orientation[0]);
         }
     };
 
