@@ -65,12 +65,16 @@ public class Animator {
         animator.start();
     }
 
+    public float positivize(float value) {
+        return (value > 0) ? value : (value + 2 * (float) Math.PI);
+    }
+
     private class AnimatorUpdateListener implements ValueAnimator.AnimatorUpdateListener {
 
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             float alpha = (float) compensator.removeCompensation((float) animation.getAnimatedValue());
-            updateListener.onUpdate(alpha);
+            updateListener.onUpdate(positivize(alpha));
         }
     }
 }

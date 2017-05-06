@@ -24,7 +24,6 @@ public class FIRFilter extends Filter {
 
     private Compensator compensator = new Compensator();
 
-
     @Override
     public float filter(float u) {
         double uC = compensator.compensate(positivize(u));
