@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.xenione.libs.calibrator.CalibratorView;
 import com.xenione.libs.calibrator.orientation.OrientationService;
+import com.xenione.libs.calibrator.orientation.filters.FIRFilter;
 
 public class CalibrationActivity extends AppCompatActivity {
 
@@ -20,15 +21,22 @@ public class CalibrationActivity extends AppCompatActivity {
         calibratorView = (CalibratorView) findViewById(R.id.calibrator);
         calibratorView.setOnCalibrationListener(new CalibratorView.CalibrationListener() {
             @Override
-            public void onCalibrationComplete() {
-                CalibrationActivity.this.startActivity(OrientationActivity
-                        .newIntent(CalibrationActivity.this));
-                finish();
+            public void onCalibrationComplete(int percentage) {
+                if (percentage > 10) {
+                    navigateToOrientation();
+                }
             }
         });
         mOrientationService = new OrientationService(this);
         mOrientationService.registerUpdateListener(mOrientationListener);
         mOrientationService.start(100);
+        mOrientationService.setFilterX(new FIRFilter());
+    }
+
+    private void navigateToOrientation(){
+        CalibrationActivity.this.startActivity(OrientationActivity
+                .newIntent(CalibrationActivity.this));
+        finish();
     }
 
     private OrientationService.OrientationListener mOrientationListener = new OrientationService.OrientationListener() {

@@ -24,8 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right|center"
-            android:switchPadding="5dp"
-            android:text="Filtered" />
+            android:switchPadding="5dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -44,8 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right|center"
-            android:switchPadding="5dp"
-            android:text="Filtered" />
+            android:switchPadding="5dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,7 +62,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right|center"
-            android:switchPadding="5dp"
-            android:text="Filtered" />
+            android:switchPadding="5dp" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Switch on/off to enable/disable filter " />
 </LinearLayout>

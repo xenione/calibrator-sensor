@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import com.xenione.libs.calibrator.orientation.filters.FIRFilter;
+import com.xenione.libs.calibrator.orientation.filters.Filter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +63,18 @@ public class OrientationService implements Runnable {
 
     private void init(Context context) {
         gyro = new Gyroscope(context);
-        gyro.setFilter(new FIRFilter(), new FIRFilter(), new FIRFilter()); /*this filters are for 50 ms sample time*/
+    }
+
+    public void setFilterX(Filter filter) {
+        gyro.setFilterX(filter);
+    }
+
+    public void setFilterY(Filter filter) {
+        gyro.setFilterY(filter);
+    }
+
+    public void setFilterZ(Filter filter) {
+        gyro.setFilterZ(filter);
     }
 
     public void start(int fixRate){

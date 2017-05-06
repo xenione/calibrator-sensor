@@ -32,7 +32,7 @@ import com.xenione.libs.calibrator.utils.MathUtils;
 public class CalibratorView extends View {
 
     public interface CalibrationListener {
-        void onCalibrationComplete();
+        void onCalibrationComplete(int percentage);
     }
 
     private int SPINE_LENGTH;
@@ -166,9 +166,9 @@ public class CalibratorView extends View {
             return;
         }
         spine.addPaintLayer();
-        if (spine.isLastLayer()
-                && --lastLayerCountdown == 0) {
-            mListener.onCalibrationComplete();
+        if (spine.isLastLayer()) {
+            lastLayerCountdown--;
+            mListener.onCalibrationComplete(((AMOUNT - lastLayerCountdown) * 100) / AMOUNT);
         }
     }
 
