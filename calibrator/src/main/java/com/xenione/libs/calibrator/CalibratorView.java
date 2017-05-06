@@ -23,6 +23,7 @@ import android.graphics.Matrix;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 
 import com.xenione.libs.calibrator.coordinator_system.Polar;
@@ -34,8 +35,8 @@ public class CalibratorView extends View {
         void onCalibrationComplete();
     }
 
-    private static final int SPINE_LENGTH = 40;
-    private static final int MARGIN = 10;
+    private int SPINE_LENGTH;
+    private int MARGIN;
 
     private static final int AMOUNT = 100;
     private int lastLayerCountdown = AMOUNT;
@@ -71,6 +72,8 @@ public class CalibratorView extends View {
     }
 
     private void init() {
+        SPINE_LENGTH = toPx(20);
+        MARGIN = toPx(5);
         animator.setUpdateListener(new Animator.UpdateListener() {
             @Override
             public void onUpdate(float fraction) {
@@ -78,7 +81,6 @@ public class CalibratorView extends View {
             }
         });
     }
-
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -127,8 +129,8 @@ public class CalibratorView extends View {
     }
 
     private Ball buildBall() {
-        int radius = 25;
-        int gap = 10;
+        int radius = toPx(14);
+        int gap = toPx(5);
         int distance = mSize - 2 * radius - SPINE_LENGTH - MARGIN - gap;
         return new Ball.Builder()
                 .radius(radius)
@@ -168,5 +170,9 @@ public class CalibratorView extends View {
                 && --lastLayerCountdown == 0) {
             mListener.onCalibrationComplete();
         }
+    }
+
+    private int toPx(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 }
