@@ -22,7 +22,7 @@ public class CalibrationActivity extends AppCompatActivity {
         calibratorView.setOnCalibrationListener(new CalibratorView.CalibrationListener() {
             @Override
             public void onCalibrationComplete(int percentage) {
-                if (percentage > 10) {
+                if (percentage > 70) {
                     navigateToOrientation();
                 }
             }
