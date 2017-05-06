@@ -5,12 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="20dp"
     tools:context="com.xenione.apps.calibrator_sensor.CalibrationActivity">
 
     <com.xenione.libs.calibrator.CalibratorView
         android:id="@+id/calibrator"
         android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@android:color/black" />
+        android:layout_height="300dp" />
+    <TextView
+        android:text="Calibrate by waving phone in a figure 8 motion"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"
+        android:textSize="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
