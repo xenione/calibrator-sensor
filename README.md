@@ -1,4 +1,4 @@
-# calibrator-sensor
+# Calibrator - Sensor
  [ ![bintray](https://api.bintray.com/packages/xenione/maven/sensor-calibrator/images/download.svg?version=1.0.1) ](https://bintray.com/xenione/maven/sensor-calibrator/1.0.1/link)
 
 Widget to calibrate sensors (Orientation). This Calibrator can be embedded in your own App.
@@ -64,11 +64,13 @@ In your code:
 
 Eugeni Josep Senent i Gabriel - @xenione
 
-![linkedin](https://www.linkedin.com/in/eugeni-senent-gabriel-bb198723)
-
 xenione@gmail.com
 
 www.xenione.com
+
+<a href="https://www.linkedin.com/in/eugeni-senent-gabriel-bb198723">
+  <img alt="Add me to Linkedin" src="https://image.freepik.com/iconos-gratis/boton-del-logotipo-linkedin_318-84979.png" height="60" width="60"/>
+</a>
 
 
 # License
@@ -89,7 +91,9 @@ www.xenione.com
 
 
 
-##Donation
+# Donation
+-------
+
 The full money collected here will be destinated to improve Open Source Projects.
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YLQUW5N9KY9MU)
